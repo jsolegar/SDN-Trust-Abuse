@@ -1,0 +1,22 @@
+# users.txt
+
+admin
+root
+test
+sdsh2
+guest
+ubuntu
+user
+operator
+service
+monitor
+backup
+dev
+support
+security
+manager
+oracle
+postgres
+mysql
+apache
+student

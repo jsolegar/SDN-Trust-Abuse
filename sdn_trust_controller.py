@@ -221,10 +221,22 @@ class SDNTrustController(app_manager.RyuApp):
         alertmsg = msg.alertmsg[0].decode()
         LOG.info("[SNORT ALERT] %s", alertmsg)
 
-        # Enviar alerta a InfluxDB
+        # Deduir src/dst segons tipus d'alerta
+        if "h2 to h3" in alertmsg or "Internal" in alertmsg:
+            src_ip = H2_IP
+            dst_ip = H3_IP
+        elif "External" in alertmsg or "SSH" in alertmsg or "Nmap" in alertmsg or "Port Scan" in alertmsg:
+            src_ip = H1_IP
+            dst_ip = H2_IP
+        else:
+            src_ip = H1_IP
+            dst_ip = H2_IP
+
+        # Enviar alerta a InfluxDB amb src/dst
         timestamp = int(datetime.datetime.now().timestamp() * 1000000000)
-        influx_msg = 'snort_alerts,type="%s" value=1 %d' % (
-            alertmsg.replace(' ', '_'), timestamp)
+        alert_type = alertmsg.replace(' ', '_')
+        influx_msg = 'snort_alerts,type="%s",src="%s",dst="%s" value=1 %d' % (
+            alert_type, src_ip, dst_ip, timestamp)
         send_to_influx(influx_msg)
 
         if "External ICMP Flood" in alertmsg or "External TCP Flood" in alertmsg:

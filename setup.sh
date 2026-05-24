@@ -19,7 +19,7 @@ echo ""
 echo "=== [1/8] Instalando dependencias del sistema ==="
 apt-get update -qq
 apt-get install -y \
-    mininet \
+    \
     openvswitch-switch \
     snort \
     nmap \
@@ -34,7 +34,7 @@ apt-get install -y \
 # ==================================================
 echo ""
 echo "=== [2/8] Instalando Ryu ==="
-pip3 install ryu 2>/dev/null || pip3 install ryu --break-system-packages
+# pip3 install ryu 2>/dev/null || pip3 install ryu --break-system-packages
 
 # ==================================================
 # 3. InfluxDB
